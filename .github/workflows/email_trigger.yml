@@ -2,7 +2,7 @@ name: CPQ Auto Renewal Email
 
 on:
   schedule:
-    - cron: '2 23 * * *'
+    - cron: '15 23 * * *'
   workflow_dispatch:
 
 jobs:
