@@ -1,0 +1,77 @@
+name: CPQ Auto Renewal Email
+
+on:
+  workflow_dispatch:
+  #schedule:
+  #  - cron: '10 6 * * *'
+
+jobs:
+#==========================================================Dev(T2)==================================================
+
+  Trigger-Email-Action-Invoke:
+    #if: contains(github.ref, 'release') || github.event.inputs.Environment == 'Dev(T2)'
+    runs-on: ubuntu-latest
+    environment: eatontest2(dev)
+
+    steps:
+
+         
+     - name: Invoke Table Export
+       run: |
+         curl -X POST \
+          -u ${{ 'E0623429' }}:${{ 'Test@123' }} \
+          -H "Content-Type:application/json" \
+          -d "selections:AutoRenewalAgriment"
+          $ https://eatontest2.bigmachines.com/rest/v16/datatables/actions/export > getresponse.json
+         echo \n ========= This is Json output=======
+         cat postresponse.json
+         result=`cat  postresponse.json | jq -r '.taskId'`
+         echo $taskId
+         echo "taskId=$taskId" >> $GITHUB_ENV
+    outputs:
+      result: ${{ env.taskId }}
+
+  Fetch-Result-Data:
+    needs: [Trigger-Email-Action-Invoke]
+    runs-on: ubuntu-latest
+    environment: eatontest2(dev)
+
+    steps:
+     - name: Get result data
+       run: |
+         sleep 35
+         curl -X GET \
+          -u ${{ 'E0623429' }}:${{ 'Test@123' }} \
+          -H "Content-Type:application/json" \
+          $ https://eatontest2.bigmachines.com/rest/v16/tasks/${{ needs.Fetch-Task-ID-Release.outputs.taskid }} > getresponse.json
+         echo \n ========= This is Json output=======
+         cat getresponse.json
+         result=`cat  getresponse.json | jq -r '.result'`
+         echo $result
+         echo "result=$result" >> $GITHUB_ENV
+    outputs:
+      result: ${{ env.result }}
+
+  Fetch-Zip-Package-Release:
+    needs: [Trigger-Email-Action-Invoke, Fetch-Result-Data]
+    runs-on: ubuntu-latest
+    environment: eatontest2(dev)
+
+    steps:
+     - name: Fetch zip file
+       run: |
+         curl -X GET \
+          -u ${{ 'E0623429' }}:${{ 'Test@123' }} \
+          -H "Content-Type:application/json" \
+          $https://eatontest2.bigmachines.com/rest/v16/tasks/${{ needs.Trigger-Email-Action-Invoke.outputs.taskid }}/files/${{ needs.Fetch-Result-Data.outputs.result }} -O -J
+         echo ========= List fetched files =======
+         ls -la
+         filename=`find $PWD -type f -name "*.zip"`
+         echo $filename
+         echo "filename=$filename" >> $GITHUB_ENV
+
+     - name: Upload Artifact
+       uses: actions/upload-artifact@v3
+       with:
+         name: ZipFile
+         path: ${{ env.filename }}
