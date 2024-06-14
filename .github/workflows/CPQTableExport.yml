@@ -25,11 +25,11 @@ jobs:
           $ https://eatontest2.bigmachines.com/rest/v16/datatables/actions/export > postresponse.json
          echo \n ========= This is Json output=======
          cat postresponse.json
-         result=`cat  postresponse.json | jq -r '.taskId'`
-         echo $taskId
-         echo "taskId=$taskId" >> $GITHUB_ENV
+         taskid=`cat  postresponse.json | jq -r '.taskId'`
+         echo $taskid
+         echo "taskid=$taskid" >> $GITHUB_ENV
     outputs:
-      result: ${{ env.taskId }}
+      result: ${{ env.taskid }}
 
   Fetch-Result-Data:
     needs: [Trigger-Email-Action-Invoke]
@@ -42,7 +42,7 @@ jobs:
          curl -X GET \
           -u ${{ 'E0623429' }}:${{ 'Test@123' }} \
           -H "Content-Type:application/json" \
-          $ https://eatontest2.bigmachines.com/rest/v16/tasks/${{ needs.Trigger-Email-Action-Invoke.outputs.taskId }} > getresponse.json
+          $ https://eatontest2.bigmachines.com/rest/v16/tasks/${{ needs.Trigger-Email-Action-Invoke.outputs.taskid }} > getresponse.json
          echo \n ========= This is Json output=======
          cat getresponse.json
          result=`cat  getresponse.json | jq -r '.result'`
