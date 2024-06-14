@@ -23,7 +23,7 @@ jobs:
           -H "Content-Type:application/json" \
           -d \
          '{ "selections":AutoRenewalAgriment }' \
-          $ https://eatontest2.bigmachines.com/rest/v16/datatables/actions/export > getresponse.json
+          $ https://eatontest2.bigmachines.com/rest/v16/datatables/actions/export > postresponse.json
          echo \n ========= This is Json output=======
          cat postresponse.json
          result=`cat  postresponse.json | jq -r '.taskId'`
