@@ -22,7 +22,7 @@ jobs:
           -u ${{ 'E0623429' }}:${{ 'Test@123' }} \
           -H "Content-Type:application/json" \
           -d \
-         '{ "selections":AutoRenewalAgriment }' \
+         '{ "selections":"AutoRenewalAgriment" }' \
           $ https://eatontest2.bigmachines.com/rest/v16/datatables/actions/export > postresponse.json
          echo \n ========= This is Json output=======
          cat postresponse.json
