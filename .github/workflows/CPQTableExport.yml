@@ -39,7 +39,7 @@ jobs:
     steps:
      - name: Get result data
        run: |
-         sleep 35
+         #sleep 35
          curl -X GET \
           -u ${{ 'E0623429' }}:${{ 'Test@123' }} \
           -H "Content-Type:application/json" \
