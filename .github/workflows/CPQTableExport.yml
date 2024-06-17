@@ -29,7 +29,7 @@ jobs:
          echo $taskid
          echo "taskid=$taskid" >> $GITHUB_ENV
     outputs:
-      result: ${{ env.taskid }}
+       taskid: ${{ env.taskid }}
 
   Fetch-Result-Data:
     needs: [Trigger-Email-Action-Invoke]
@@ -68,10 +68,3 @@ jobs:
          ls -la
          filename=`find $PWD -type f -name "*.zip"`
          echo $filename
-         echo "filename=$filename" >> $GITHUB_ENV
-
-     - name: Upload Artifact
-       uses: actions/upload-artifact@v3
-       with:
-         name: ZipFile
-         path: ${{ env.filename }}
