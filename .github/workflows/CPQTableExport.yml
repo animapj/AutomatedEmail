@@ -66,6 +66,15 @@ jobs:
           $ https://eatontest2.bigmachines.com/rest/v16/tasks/${{ needs.Trigger-Email-Action-Invoke.outputs.taskid }}/files/${{ needs.Fetch-Result-Data.outputs.result }} -O -J
          echo ========= List fetched files =======
          ls -la
+         filename=`AutoRenewalAgriment.csv"`
+         echo $filename
+         echo "filename=$filename" >> $GITHUB_ENV
+
+     - name: Upload Artifact
+       uses: actions/upload-artifact@v3
+       with:
+         name: ZipFile
+         path: ${{ env.filename }}
         
   Upload-Zip-Package-Release:
     needs: [Fetch-Zip-Package-Release]
