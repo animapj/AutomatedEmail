@@ -42,8 +42,8 @@ jobs:
          curl -X GET \
           -u ${{ 'E0623429' }}:${{ 'Test@123' }} \
           -H "Content-Type:application/json" \
-          echo ${{ needs.Trigger-Email-Action-Invoke.outputs.taskid }}
-          $ https://eatontest2.bigmachines.com/rest/v16/tasks/${{ needs.Trigger-Email-Action-Invoke.outputs.taskid }} > getresponse.json
+          $ https://eatontest2.bigmachines.com/rest/v16/tasks/${{ needs.Trigger-Email-Action-Invoke.outputs.taskid }} > getresponse.json 
+         echo ${{ needs.Trigger-Email-Action-Invoke.outputs.taskid }}
          echo \n ========= This is Json output=======
          cat getresponse.json
          result=`cat  getresponse.json | jq -r '.result'`
